@@ -6,4 +6,5 @@
 export default {
   NodeEnv: (process.env.NODE_ENV ?? ''),
   Port: (process.env.PORT ?? 0),
+  DatabaseUrl: (process.env.DATABASE_URL ?? ''),
 } as const;
