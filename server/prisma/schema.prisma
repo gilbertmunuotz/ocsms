@@ -43,20 +43,22 @@ model User {
   date_registered DateTime @default(now())
 
   sellerProfile Seller?
+  inquiries     Inquiry[]
 }
 
 model Seller {
-  userId         Int    @id
-  business_name  String
-  location       String
+  userId        Int    @id
+  business_name String
+  location      String
 
-  user User @relation(fields: [userId], references: [id])
+  user     User      @relation(fields: [userId], references: [id])
+  vehicles Vehicle[]
 }
 
 model VehicleCategory {
-  id             Int    @id @default(autoincrement())
-  category_name  String @unique
-  vehicles       Vehicle[]
+  id            Int       @id @default(autoincrement())
+  category_name String    @unique
+  vehicles      Vehicle[]
 }
 
 model Vehicle {
@@ -70,19 +72,19 @@ model Vehicle {
   mileage      Int
   fuel_type    String
   transmission String
-  condition    VehicleCondition           
+  condition    VehicleCondition
   description  String?
-  status       String           @default(AVAILABLE)
+  status       VehicleStatus    @default(AVAILABLE)
   date_posted  DateTime         @default(now())
 
-  seller       Seller           @relation(fields: [sellerId], references: [userId])
-  category     VehicleCategory  @relation(fields: [categoryId], references: [id])
-  images       VehicleImage[]
-  inquiries    Inquiry[]
+  seller    Seller          @relation(fields: [sellerId], references: [userId])
+  category  VehicleCategory @relation(fields: [categoryId], references: [id])
+  images    VehicleImage[]
+  inquiries Inquiry[]
 }
 
 model VehicleImage {
-  id        Int     @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
   vehicleId Int
   image_url String
 
@@ -90,7 +92,7 @@ model VehicleImage {
 }
 
 model Inquiry {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   buyerId   Int
   vehicleId Int
   message   String

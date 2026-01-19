@@ -65,8 +65,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
             });
         }
 
-        // Compare passwords
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        // Compare passwords  
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
