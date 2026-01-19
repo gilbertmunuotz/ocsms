@@ -1,4 +1,4 @@
-export type Vehicle = {
+export type VehicleEntity = {
   id: string;
   title: string;
   brand: string;
@@ -9,6 +9,5 @@ export type Vehicle = {
   mileage: number;
   fuelType: string;
   transmission: string;
-  image: string;
-  sellerName: string;
+  sellerId: string;
 };

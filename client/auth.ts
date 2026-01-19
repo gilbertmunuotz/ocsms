@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { AuthService } from "@/lib/auth/auth.service";
 
 export const authConfig = {
   providers: [
@@ -11,43 +12,18 @@ export const authConfig = {
       },
 
       async authorize(credentials) {
-        console.log("AUTHORIZE INPUT:", credentials);
-
-        if (!credentials?.email) {
+        if (!credentials?.email || !credentials?.password) {
           return null;
         }
 
-        // TEMP MOCK USERS (password ignored)
-        const email = credentials.email;
+        const user = AuthService.login(
+          credentials.email,
+          credentials.password
+        );
 
-        if (email === "admin@test.com") {
-          return {
-            id: "1",
-            email,
-            role: "admin",
-            accessToken: "admin-token",
-          };
-        }
+        if (!user) return null;
 
-        if (email === "seller@test.com") {
-          return {
-            id: "2",
-            email,
-            role: "seller",
-            accessToken: "seller-token",
-          };
-        }
-
-        if (email === "buyer@test.com") {
-          return {
-            id: "3",
-            email,
-            role: "buyer",
-            accessToken: "buyer-token",
-          };
-        }
-
-        return null;
+        return user;
       }
 ,
     }),
