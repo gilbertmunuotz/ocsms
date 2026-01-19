@@ -1,6 +1,6 @@
-import { Vehicle } from "@/types/vehicle";
+import { VehicleEntity } from "@/types/vehicle";
 
-export const vehicles: Vehicle[] = [
+export const vehicles: VehicleEntity[] = [
   {
     id: "1",
     title: "Toyota Corolla 2018",
@@ -12,8 +12,7 @@ export const vehicles: Vehicle[] = [
     mileage: 60000,
     fuelType: "Petrol",
     transmission: "Automatic",
-    image: "/car1.jpg",
-    sellerName: "John Motors",
+    sellerId: "seller-1",
   },
   {
     id: "2",
@@ -26,7 +25,6 @@ export const vehicles: Vehicle[] = [
     mileage: 42000,
     fuelType: "Petrol",
     transmission: "Automatic",
-    image: "/car2.jpg",
-    sellerName: "Arusha Auto",
+    sellerId: "seller-2",
   },
 ];

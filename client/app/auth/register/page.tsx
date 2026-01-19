@@ -1,56 +1,105 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [role, setRole] = useState("buyer");
 
-  function handleRegister(e: React.FormEvent) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    // 🔧 TEMP: frontend-only mock
-    alert("Registration successful! Please login.");
-    router.push("/login");
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/register`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      }
+    );
+
+    if (res.ok) {
+      router.push("/auth/login");
+    } else {
+      alert("Registration failed");
+    }
   }
 
   return (
-    <>
-      <h1 className="text-xl font-semibold mb-4 text-center">
-        Create Account
-      </h1>
+    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-light text-white tracking-widest mb-2">
+            PRANCING HORSE
+          </h1>
+          <div className="w-16 h-0.5 bg-red-600 mx-auto"></div>
+        </div>
 
-      <form onSubmit={handleRegister} className=" space-y-4">
-        <input className="border p-2 w-full" placeholder="Full Name" />
-        <input className="border p-2 w-full" placeholder="Email" />
-        <input
-          className="border p-2 w-full"
-          type="password"
-          placeholder="Password"
-        />
+        <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-sm">
+          <h2 className="text-2xl font-light text-white mb-8 tracking-wide">
+            Create Account
+          </h2>
 
-        <select
-          className="border p-2 w-full "
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <option className="text-black" value="buyer">Buyer</option>
-          <option className="text-black" value="seller">Seller</option>
-        </select>
+          <form onSubmit={handleRegister} className="space-y-6">
+            <div className="relative">
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-black border border-zinc-700 text-white px-4 py-3 rounded-sm 
+                         focus:outline-none focus:border-red-600 transition-colors duration-300
+                         placeholder-zinc-500"
+                required
+              />
+            </div>
 
-        <button className="bg-black text-white w-full py-2">
-          Register
-        </button>
-      </form>
+            <div className="relative">
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-black border border-zinc-700 text-white px-4 py-3 rounded-sm 
+                         focus:outline-none focus:border-red-600 transition-colors duration-300
+                         placeholder-zinc-500"
+                required
+              />
+            </div>
 
-      <p className="text-sm text-center mt-4">
-        Already have an account?{" "}
-        <Link href="/auth/login" className="underline">
-          Login
-        </Link>
-      </p>
-    </>
+            <button
+              type="submit"
+              className="w-full bg-red-600 hover:bg-red-700 text-white font-light tracking-widest 
+                       py-3 rounded-sm transition-all duration-300 uppercase text-sm
+                       transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+              Register
+            </button>
+          </form>
+
+          <div className="mt-8 pt-6 border-t border-zinc-800">
+            <p className="text-zinc-400 text-sm text-center">
+              Already have an account?{" "}
+              <a
+                href="/auth/login"
+                className="text-red-600 hover:text-red-500 transition-colors font-light"
+              >
+                Sign In
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <p className="text-zinc-600 text-xs text-center mt-8 tracking-wide">
+          PERFORMANCE • LUXURY • PRECISION
+        </p>
+      </div>
+    </div>
   );
 }

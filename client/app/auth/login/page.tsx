@@ -1,19 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError("");
 
     const res = await signIn("credentials", {
       email,
@@ -21,45 +19,89 @@ export default function LoginPage() {
       redirect: false,
     });
 
-    if (res?.error) {
-      setError("Invalid credentials");
-      return;
+    if (res?.ok) {
+      router.push("/dashboard");
+    } else {
+      alert("Invalid credentials");
     }
-
-    router.push("/dashboard");
   }
 
   return (
-    <>
-      <h1 className="text-xl font-semibold mb-4 text-center">Login</h1>
+    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Logo/Brand Area */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-light text-white tracking-widest mb-2">
+            PRANCING HORSE
+          </h1>
+          <div className="w-16 h-0.5 bg-red-600 mx-auto"></div>
+        </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          className="border p-2 w-full"
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        {/* Form Card */}
+        <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-sm">
+          <h2 className="text-2xl font-light text-white mb-8 tracking-wide">
+            Sign In
+          </h2>
 
-        <input
-          className="border p-2 w-full"
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <form onSubmit={handleLogin} className="space-y-6">
+            {/* Email Input */}
+            <div className="relative">
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-black border border-zinc-700 text-white px-4 py-3 rounded-sm 
+                         focus:outline-none focus:border-red-600 transition-colors duration-300
+                         placeholder-zinc-500"
+                required
+              />
+            </div>
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+            {/* Password Input */}
+            <div className="relative">
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-black border border-zinc-700 text-white px-4 py-3 rounded-sm 
+                         focus:outline-none focus:border-red-600 transition-colors duration-300
+                         placeholder-zinc-500"
+                required
+              />
+            </div>
 
-        <button className="bg-black text-white w-full py-2">
-          Login
-        </button>
-      </form>
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full bg-red-600 hover:bg-red-700 text-white font-light tracking-widest 
+                       py-3 rounded-sm transition-all duration-300 uppercase text-sm
+                       transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+              Login
+            </button>
+          </form>
 
-      <p className="text-sm text-center mt-4">
-        Don’t have an account?{" "}
-        <Link href="/register" className="underline">
-          Register
-        </Link>
-      </p>
-    </>
+          {/* Divider */}
+          <div className="mt-8 pt-6 border-t border-zinc-800">
+            <p className="text-zinc-400 text-sm text-center">
+              Don't have an account?{" "}
+              <a
+                href="/auth/register"
+                className="text-red-600 hover:text-red-500 transition-colors font-light"
+              >
+                Register
+              </a>
+            </p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <p className="text-zinc-600 text-xs text-center mt-8 tracking-wide">
+          PERFORMANCE • LUXURY • PRECISION
+        </p>
+      </div>
+    </div>
   );
 }

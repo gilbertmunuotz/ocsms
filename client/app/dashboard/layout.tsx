@@ -1,55 +1,38 @@
-"use client";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
-
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { data: session } = useSession();
-  const role = session?.user.role;
+  const session = await auth();
+  if (!session) redirect("/auth/login");
 
   return (
-    <div className="min-h-screen">
-      <nav className="flex items-center justify-between px-6 py-4 border-b">
-        <div className="flex gap-4">
-          {/* Buyer links */}
-          <Link href="/dashboard/vehicles">Vehicles</Link>
+    <div className="min-h-screen flex bg-[#111111]">
+      {/* Sidebar */}
+      <aside className="w-64 bg-[#1F1F1F] p-6">
+        <h2 className="text-xl font-bold text-[#DA291C] mb-6">
+          Dashboard
+        </h2>
 
-          {/* Seller links */}
-          {role === "seller" && (
-            <>
-              <Link href="/dashboard/seller">My Vehicles</Link>
-              <Link href="/dashboard/seller/inquiries">Inquiries</Link>
-            </>
-          )}
+        <nav className="space-y-3 text-sm">
+          <p className="text-gray-400">
+            Role:{" "}
+            <span className="text-white font-medium">
+              {session.user.role}
+            </span>
+          </p>
 
-          {/* Admin links */}
-          {role === "admin" && (
-            <>
-              <Link href="/dashboard/admin">Admin</Link>
-              <Link href="/dashboard/admin/users">Users</Link>
-            </>
-          )}
-        </div>
+          <a className="block hover:text-[#DA291C]" href="/dashboard">
+            Overview
+          </a>
+        </nav>
+      </aside>
 
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-500 capitalize">
-            {role}
-          </span>
-
-          <button
-            onClick={() => signOut({ callbackUrl: "/auth/login" })}
-            className="text-sm text-red-600"
-          >
-            Logout
-          </button>
-        </div>
-      </nav>
-
-      <main className="p-6">{children}</main>
+      {/* Content */}
+      <main className="flex-1 p-8">{children}</main>
     </div>
   );
 }

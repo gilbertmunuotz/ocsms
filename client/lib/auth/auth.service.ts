@@ -1,30 +1,35 @@
-import { UserRepository } from "../repositories/user.repository";
-
-export type AuthResult = {
-  id: string;
-  email: string;
-  name: string;
-  role: "admin" | "seller" | "buyer";
-  accessToken: string;
+type LoginResponse = {
+  token: string;
+  user: {
+    id: number;
+    email: string;
+    name: string;
+    role: "USER" | "ADMIN";
+  };
 };
 
+const BASE_URL = "https://shirly-pseudocubic-leatha.ngrok-free.dev";
+
 export class AuthService {
-  static login(
-    email: string,
-    password: string
-  ): AuthResult | null {
-    const user = UserRepository.findByEmail(email);
+  static async login(email: string, password: string) {
+    const res = await fetch(`${BASE_URL}/api/v1/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-    if (!user) return null;
-    if (user.password !== password) return null;
+    if (!res.ok) return null;
 
-    // mock JWT
+    const data: LoginResponse = await res.json();
+
     return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-      accessToken: "mock-jwt-token",
+      id: String(data.user.id),
+      email: data.user.email,
+      name: data.user.name,
+      role: data.user.role === "ADMIN" ? "admin" : "buyer",
+      accessToken: data.token,
     };
   }
 }

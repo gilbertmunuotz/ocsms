@@ -1,57 +1,68 @@
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { AuthService } from "@/lib/auth/auth.service";
+import Credentials from "next-auth/providers/credentials";
+import type { NextAuthConfig } from "next-auth";
 
-export const authConfig = {
+const API = process.env.NEXT_PUBLIC_API_BASE_URL!;
+
+export const authConfig: NextAuthConfig = {
   providers: [
-    CredentialsProvider({
-      name: "Credentials",
+    Credentials({
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: { type: "text" },
+        password: { type: "password" },
       },
 
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
+        if (!credentials?.email || !credentials.password) return null;
 
-        const user = AuthService.login(
-          credentials.email,
-          credentials.password
-        );
+        const res = await fetch(`${API}/api/v1/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: credentials.email,
+            password: credentials.password,
+          }),
+        });
 
-        if (!user) return null;
+        if (!res.ok) return null;
 
-        return user;
-      }
-,
+        const data = await res.json();
+
+        return {
+          id: String(data.user.id),
+          email: data.user.email,
+          name: data.user.name,
+          role: data.user.role,
+          accessToken: data.token,
+        };
+      },
     }),
   ],
 
   session: {
-    strategy: "jwt" as const,
+    strategy: "jwt",
   },
 
   pages: {
-    signIn: "/login",
+    signIn: "/auth/login",
   },
 
   callbacks: {
-    async jwt({ token, user }: any) {
-      if (user) {
-        token.id = user.id;
-        token.role = user.role;
-        token.accessToken = user.accessToken;
-      }
+    jwt({ token, user }) {
+      if (user) token.user = user;
       return token;
     },
 
-    async session({ session, token }: any) {
-      session.user.id = token.id;
-      session.user.role = token.role;
-      session.user.accessToken = token.accessToken;
+    session({ session, token }) {
+      session.user = token.user as any;
       return session;
     },
   },
 };
+
+export const {
+  handlers,
+  auth,
+  signIn,
+  signOut,
+} = NextAuth(authConfig);

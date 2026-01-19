@@ -1,24 +1,20 @@
-"use client";
-
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
-export default function DashboardIndexPage() {
-  const { data: session, status } = useSession();
+export default async function DashboardPage() {
+  const session = await auth();
 
-  useEffect(() => {
-    if (status !== "authenticated") return;
+  if (!session) {
+    redirect("/auth/login");
+  }
 
-    switch (session.user.role) {
-      case "admin":
-        redirect("/dashboard/admin");
-      case "seller":
-        redirect("/dashboard/seller");
-      default:
-        redirect("/dashboard/vehicles");
-    }
-  }, [status, session]);
+  if (session.user.role === "ADMIN") {
+    redirect("/dashboard/admin");
+  }
 
-  return <p className="p-6">Loading dashboard...</p>;
+  if (session.user.role === "SELLER") {
+    redirect("/dashboard/seller");
+  }
+
+  redirect("/dashboard/buyer");
 }
