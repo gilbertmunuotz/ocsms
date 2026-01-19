@@ -28,7 +28,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md md:max-w-lg lg:max-w-xl">
         {/* Logo/Brand Area */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-light text-white tracking-widest mb-2">
