@@ -12,3 +12,30 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+// ================== ENUMS ==================
+enum Role {
+  ADMIN
+  SELLER
+  BUYER
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  name            String
+  email           String   @unique
+  phone_number    String
+  password        String
+  role            Role     @default(BUYER)
+  date_registered DateTime @default(now())
+
+  sellerProfile Seller?
+}
+
+model Seller {
+  userId         Int    @id
+  business_name  String
+  location       String
+
+  user User @relation(fields: [userId], references: [id])
+}

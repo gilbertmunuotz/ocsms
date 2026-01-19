@@ -3,8 +3,11 @@ import express, { NextFunction, Request, Response } from 'express';
 import dotenv from "dotenv";
 // Load env variables
 dotenv.config();
+import { USERS_URL } from './constants/constant';
+import cors from "cors";
 import HttpStatusCodes from './constants/HttpStatusCodes';
 import EnvVars from './constants/env';
+import AuthRoutes from './routes/auth';
 
 // ****  Setup **** //
 
@@ -15,7 +18,10 @@ const app = express();
 
 // Basic middleware
 app.use(express.json());
-
+app.use(cors({
+  origin: `${USERS_URL}`,
+  credentials: true,
+}));
 
 //Test Sample Route
 app.get('/api', (req: Request, res: Response, next: NextFunction) => {
@@ -28,6 +34,9 @@ app.get('/api', (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+
+//Define Routes Here
+app.use('/api/v1/auth', AuthRoutes);
 
 // Listen to Server Response
 const port = EnvVars.Port;

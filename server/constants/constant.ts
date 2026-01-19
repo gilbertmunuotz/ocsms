@@ -1,0 +1,1 @@
+export const USERS_URL = process.env.CLIENT_URL;
