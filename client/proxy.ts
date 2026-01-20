@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const { pathname } = req.nextUrl;
 
@@ -31,14 +31,14 @@ export async function middleware(req: NextRequest) {
 
     // Role-based folder access
     if (pathname.startsWith("/dashboard/admin") && token.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/dashboard/buyer", req.url));
+      return NextResponse.redirect(new URL("/auth/login", req.url));
     }
 
     if (pathname.startsWith("/dashboard/seller") && token.role !== "SELLER" && token.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/dashboard/buyer", req.url));
+      return NextResponse.redirect(new URL("/auth/login", req.url));
     }
 
-    if (pathname.startsWith("/dashboard/buyer") && token.role !== "BUYER" && token.role !== "SELLER" && token.role !== "ADMIN") {
+    if (pathname.startsWith("/dashboard/buyer") && token.role !== "BUYER" && token.role !== "ADMIN") {
       return NextResponse.redirect(new URL("/auth/login", req.url));
     }
 
