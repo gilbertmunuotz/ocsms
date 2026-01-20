@@ -74,8 +74,8 @@ export async function login(req: Request, res: Response, next: NextFunction) {
             });
         }
 
-        // Generate JWT
-        const token = generateJwtToken(Number(user.id));
+        // Generate JWT token
+        const token = generateJwtToken(user.id, user.role);
 
         return res.status(HttpStatusCodes.OK).json({
             message: "Login successful",

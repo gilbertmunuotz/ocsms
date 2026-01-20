@@ -8,6 +8,7 @@ import cors from "cors";
 import HttpStatusCodes from './constants/HttpStatusCodes';
 import EnvVars from './constants/env';
 import AuthRoutes from './routes/auth';
+import VehicleCategoryRoutes from "./routes/vehicleCategory";
 
 // ****  Setup **** //
 
@@ -37,6 +38,7 @@ app.get('/api', (req: Request, res: Response, next: NextFunction) => {
 
 //Define Routes Here
 app.use('/api/v1/auth', AuthRoutes);
+app.use('/api/v1/vehicleCategory', VehicleCategoryRoutes);
 
 // Listen to Server Response
 const port = EnvVars.Port;
