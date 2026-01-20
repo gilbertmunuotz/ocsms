@@ -6,19 +6,53 @@ export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const { pathname } = req.nextUrl;
 
-  // not logged in
-  if (!token && pathname !== "/auth/login") {
-    return NextResponse.redirect(new URL("/login", req.url));
+  // Public routes: login & register
+  if (pathname.startsWith("/auth/login") || pathname.startsWith("/auth/register")) {
+    // Redirect logged-in users away from login/register
+    if (token?.role) {
+      switch (token.role) {
+        case "ADMIN":
+          return NextResponse.redirect(new URL("/dashboard/admin", req.url));
+        case "SELLER":
+          return NextResponse.redirect(new URL("/dashboard/seller", req.url));
+        default:
+          return NextResponse.redirect(new URL("/dashboard/buyer", req.url));
+      }
+    }
+    return NextResponse.next();
   }
 
-  // role-based protection
-  if (pathname.startsWith("/admin") && token?.role !== "admin") {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+  // Require authentication for dashboard subfolders
+  if (pathname.startsWith("/dashboard")) {
+    if (!token) {
+      return NextResponse.redirect(new URL("/auth/login", req.url));
+    }
+
+
+    // Role-based folder access
+    if (pathname.startsWith("/dashboard/admin") && token.role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/dashboard/buyer", req.url));
+    }
+
+    if (pathname.startsWith("/dashboard/seller") && token.role !== "SELLER" && token.role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/dashboard/buyer", req.url));
+    }
+
+    if (pathname.startsWith("/dashboard/buyer") && token.role !== "BUYER" && token.role !== "SELLER" && token.role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/auth/login", req.url));
+    }
+
+    return NextResponse.next();
   }
 
+  // All other routes (public pages)
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/auth/login",
+    "/auth/register"
+  ]
 };
