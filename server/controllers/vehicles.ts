@@ -112,6 +112,57 @@ export async function getVehicleById(req: Request, res: Response, next: NextFunc
     }
 }
 
+//(DESC) Update vehicle (only seller or admin)
+export async function updateVehicle(req: Request, res: Response, next: NextFunction) {
+    const user = req.user!;
+    const { id } = req.params;
+
+    try {
+        const vehicle = await prisma.vehicle.findUnique({
+            where: { id: Number(id) },
+        });
+
+        if (!vehicle) {
+            return res.status(HttpStatusCodes.NOT_FOUND).json({
+                message: "Vehicle not found",
+            });
+        }
+
+        // Authorization check
+        if (user.role !== "ADMIN" && vehicle.sellerId !== user.id) {
+            return res.status(HttpStatusCodes.FORBIDDEN).json({
+                message: "You are not authorized to update this vehicle",
+            });
+        }
+
+        const { description, price, brand, year, mileage, status, transmission, model, fuel_type, condition } = req.body;
+
+
+        const updatedVehicle = await prisma.vehicle.update({
+            where: { id: Number(id) },
+            data: {
+                description,
+                price,
+                brand,
+                year,
+                mileage,
+                status,
+                transmission,
+                model,
+                fuel_type,
+                condition,
+            },
+        });
+
+        return res.status(HttpStatusCodes.OK).json({
+            message: "Vehicle updated successfully",
+            vehicle: updatedVehicle,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 //(DESC) Delete vehicle (only Seller or Admin)
 export async function deleteVehicle(req: Request, res: Response, next: NextFunction) {
     const user = req.user!;

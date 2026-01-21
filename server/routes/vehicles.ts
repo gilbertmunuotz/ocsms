@@ -2,7 +2,7 @@
 import { Router } from "express";
 import { verifyToken } from '../middlewares/jwtToken';
 import { authorize } from "../middlewares/authorize";
-import { createVehicle, getVehicles, getVehicleById, deleteVehicle } from "../controllers/vehicles";
+import { createVehicle, getVehicles, getVehicleById, deleteVehicle, updateVehicle } from "../controllers/vehicles";
 
 // **** Functions **** //
 //Initiate Express Router
@@ -16,6 +16,9 @@ router.get("/all", verifyToken, getVehicles);
 
 // Read single vehicle
 router.get("/vehicle/:id", verifyToken, getVehicleById);
+
+// Update Vehicle Information
+router.put("/update/:id", verifyToken, authorize("SELLER", "ADMIN"), updateVehicle);
 
 // Delete vehicle (SELLER owns it or ADMIN)
 router.delete("/delete/:id", verifyToken, authorize("SELLER", "ADMIN"), deleteVehicle);
