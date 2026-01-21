@@ -9,6 +9,8 @@ import HttpStatusCodes from './constants/HttpStatusCodes';
 import EnvVars from './constants/env';
 import AuthRoutes from './routes/auth';
 import VehicleCategoryRoutes from "./routes/vehicleCategory";
+import VehicleRoutes from './routes/vehicles';
+import SellerRoutes from "./routes/seller";
 
 // ****  Setup **** //
 
@@ -39,6 +41,8 @@ app.get('/api', (req: Request, res: Response, next: NextFunction) => {
 //Define Routes Here
 app.use('/api/v1/auth', AuthRoutes);
 app.use('/api/v1/vehicleCategory', VehicleCategoryRoutes);
+app.use('/api/v1/vehicle', VehicleRoutes);
+app.use('/api/v1/seller', SellerRoutes);
 
 // Listen to Server Response
 const port = EnvVars.Port;

@@ -18,10 +18,11 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): vo
     try {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+        console.log("JWT payload:", decoded);
 
         // Attach authenticated user to request
         req.user = {
-            id: decoded.id,
+            id: decoded.userId,
             role: decoded.role,
         };
 
