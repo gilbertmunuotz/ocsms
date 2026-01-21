@@ -11,6 +11,7 @@ import AuthRoutes from './routes/auth';
 import VehicleCategoryRoutes from "./routes/vehicleCategory";
 import VehicleRoutes from './routes/vehicles';
 import SellerRoutes from "./routes/seller";
+import AdminRoutes from "./routes/admin";
 
 // ****  Setup **** //
 
@@ -43,6 +44,7 @@ app.use('/api/v1/auth', AuthRoutes);
 app.use('/api/v1/vehicleCategory', VehicleCategoryRoutes);
 app.use('/api/v1/vehicle', VehicleRoutes);
 app.use('/api/v1/seller', SellerRoutes);
+app.use('/api/v1/users', AdminRoutes);
 
 // Listen to Server Response
 const port = EnvVars.Port;
