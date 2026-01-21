@@ -38,10 +38,14 @@ export interface Vehicle {
 }
 
 export interface JwtPayload {
-    id: number;
+    userId: number;
     role: Role;
 }
 
 export interface CreateVehicleCategory {
     category_name: string;
+}
+
+export interface Roles {
+    role: Role;
 }
