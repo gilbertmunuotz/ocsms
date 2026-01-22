@@ -12,7 +12,7 @@ const router = Router();
 router.post("/new", verifyToken, authorize("SELLER", "ADMIN"), createVehicle);
 
 //Read all vehicles
-router.get("/all", verifyToken, getVehicles);
+router.get("/all", getVehicles);
 
 // Read single vehicle
 router.get("/vehicle/:id", verifyToken, getVehicleById);

@@ -1,4 +1,4 @@
-import { Home, User2, ChevronUp, Settings } from "lucide-react"
+import { Home, User2, ChevronUp } from "lucide-react"
 import {Sidebar,SidebarContent,SidebarFooter,SidebarGroup,SidebarGroupContent,SidebarMenu,SidebarMenuButton,SidebarMenuItem} from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { auth } from "@/auth";
@@ -9,13 +9,8 @@ import Link from "next/link";
 const items = [
     {
         title: "Home",
-        url: "/home",
+        url: "/dashboard",
         icon: Home,
-    },
-    {
-        title: "Admin",
-        url: "/settings",
-        icon: Settings
     }
 ]
 

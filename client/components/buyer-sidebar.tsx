@@ -1,21 +1,17 @@
-import { Home, User2, ChevronUp, Settings } from "lucide-react"
-import {Sidebar,SidebarContent,SidebarFooter,SidebarGroup,SidebarGroupContent,SidebarMenu,SidebarMenuButton,SidebarMenuItem} from "@/components/ui/sidebar"
+import { Home, User2, ChevronUp } from "lucide-react"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { auth } from "@/auth";
 import LogoutButton from "./logout";
 import Link from "next/link";
+import Image from "next/image"
 
 // Menu items.
 const items = [
     {
         title: "Home",
-        url: "/home",
+        url: "/dashboard",
         icon: Home,
-    },
-    {
-        title: "Buyer",
-        url: "/settings",
-        icon: Settings
     }
 ]
 
@@ -27,6 +23,7 @@ export default async function BuyerSidebar() {
         <Sidebar>
             <SidebarContent>
                 <SidebarGroup>
+                    <Image src="/cars.jpg" width={200} height={400} className="object-cover rounded-full" alt="Dashboard Image" />
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {items.map((item) => (

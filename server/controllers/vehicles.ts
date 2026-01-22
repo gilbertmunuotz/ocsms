@@ -66,12 +66,12 @@ export async function createVehicle(req: Request, res: Response, next: NextFunct
 
 //(DESC) Get All Vehicles
 export async function getVehicles(req: Request, res: Response, next: NextFunction) {
-    const user = req.user!;
+    const user = req.user;
 
     try {
         let vehicles;
 
-        if (user.role === "SELLER") {
+        if (user?.role === "SELLER") {
             // Sellers only see their own vehicles
             vehicles = await prisma.vehicle.findMany({
                 where: { sellerId: user.id },
