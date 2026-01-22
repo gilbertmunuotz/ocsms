@@ -5,7 +5,7 @@ export default async function BuyerLayout({ children, }: { children: React.React
   return (
     <SidebarProvider>
       <BuyerSidebar />
-      <main className="flex-1 bg-white">
+      <main className="flex-1">
         <SidebarTrigger />
         {children}
       </main>
