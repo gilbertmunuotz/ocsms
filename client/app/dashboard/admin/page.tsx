@@ -1,25 +1,18 @@
-"use client";
+import StatCard from "@/components/admin/StatCard";
 
-import { useSession } from "next-auth/react";
-
-export default function AdminPage() {
-  const { data: session } = useSession();
-
-  if (session?.user.role !== "admin") {
-    return <p className="text-red-500">Access denied</p>;
-  }
-
+export default function AdminDashboard() {
   return (
     <div>
-      <h1 className="text-xl font-semibold mb-4">
-        Admin Dashboard
-      </h1>
+      <h2 className="text-2xl font-light mb-6 tracking-wide">
+        Overview
+      </h2>
 
-      <ul className="list-disc pl-6">
-        <li>Manage users</li>
-        <li>Manage vehicles</li>
-        <li>View inquiries</li>
-      </ul>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <StatCard title="Total Vehicles" value="128" />
+        <StatCard title="Active Users" value="54" />
+        <StatCard title="Pending Inquiries" value="12" />
+        <StatCard title="Dealers" value="8" />
+      </div>
     </div>
   );
 }
