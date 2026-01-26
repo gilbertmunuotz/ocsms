@@ -1,7 +1,7 @@
 // *** Import Router & Controller Func *** //
 import { Router } from "express";
-import { LoginMiddleware } from "../middlewares/auth/login";
-import { RegisterMiddleware } from "../middlewares/auth/register";
+import { Login } from "../validations/auth/login";
+import { Register } from "../validations/auth/register";
 import { register, login } from "../controllers/auth";
 
 // **** Functions **** //
@@ -10,11 +10,11 @@ const router = Router();
 
 
 /* Register Route */
-router.post('/register', RegisterMiddleware, register);
+router.post('/register', Register, register);
 
 
 /* Login Route */
-router.post('/login', LoginMiddleware, login);
+router.post('/login', Login, login);
 
 
 // **** Export default **** //
