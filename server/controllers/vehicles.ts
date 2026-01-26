@@ -75,12 +75,12 @@ export async function getVehicles(req: Request, res: Response, next: NextFunctio
             // Sellers only see their own vehicles
             vehicles = await prisma.vehicle.findMany({
                 where: { sellerId: user.id },
-                include: { category: true, seller: true },
+                include: { category: true, seller: true, images: true },
             });
         } else {
             // Admin or Buyer sees all vehicles
             vehicles = await prisma.vehicle.findMany({
-                include: { category: true, seller: true },
+                include: { category: true, seller: true, images: true },
             });
         }
 
@@ -90,6 +90,33 @@ export async function getVehicles(req: Request, res: Response, next: NextFunctio
     }
 }
 
+// (DESC) Get vehicles for buyers (AVAILABLE only)
+export async function getAvailableVehicles(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const vehicles = await prisma.vehicle.findMany({
+      where: {
+        status: "AVAILABLE",
+      },
+      include: {
+        category: true,
+        images: true,
+      },
+      orderBy: {
+        date_posted: "desc",
+      },
+    });
+
+    return res.status(HttpStatusCodes.OK).json({ vehicles });
+  } catch (error) {
+    next(error);
+  }
+}
+
+
 //(DESC) Get single vehicle by ID
 export async function getVehicleById(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
@@ -97,7 +124,7 @@ export async function getVehicleById(req: Request, res: Response, next: NextFunc
     try {
         const vehicle = await prisma.vehicle.findUnique({
             where: { id: Number(id) },
-            include: { category: true, seller: true },
+            include: { category: true, seller: true, images: true },
         });
 
         if (!vehicle) {
