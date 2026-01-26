@@ -65,8 +65,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
             });
         }
 
-        // Compare passwords
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        // Compare passwords  
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
@@ -75,8 +74,8 @@ export async function login(req: Request, res: Response, next: NextFunction) {
             });
         }
 
-        // Generate JWT
-        const token = generateJwtToken(Number(user.id));
+        // Generate JWT token
+        const token = generateJwtToken(user.id, user.role);
 
         return res.status(HttpStatusCodes.OK).json({
             message: "Login successful",

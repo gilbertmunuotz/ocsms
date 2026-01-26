@@ -20,22 +20,84 @@ enum Role {
   BUYER
 }
 
+enum VehicleStatus {
+  AVAILABLE
+  SOLD
+  PENDING
+}
+
+enum VehicleCondition {
+  NEW
+  USED
+  REFURBISHED
+}
+
+// ================== MODELS ==================
 model User {
   id              Int      @id @default(autoincrement())
-  name            String
+  name            String?
   email           String   @unique
-  phone_number    String
+  phone_number    String?
   password        String
   role            Role     @default(BUYER)
   date_registered DateTime @default(now())
 
   sellerProfile Seller?
+  inquiries     Inquiry[]
 }
 
 model Seller {
-  userId         Int    @id
-  business_name  String
-  location       String
+  userId        Int    @id
+  business_name String
+  location      String
 
-  user User @relation(fields: [userId], references: [id])
+  user     User      @relation(fields: [userId], references: [id])
+  vehicles Vehicle[]
+}
+
+model VehicleCategory {
+  id            Int       @id @default(autoincrement())
+  category_name String    @unique
+  vehicles      Vehicle[]
+}
+
+model Vehicle {
+  id           Int              @id @default(autoincrement())
+  sellerId     Int
+  categoryId   Int
+  brand        String
+  model        String
+  year         Int
+  price        Float
+  mileage      Int
+  fuel_type    String
+  transmission String
+  condition    VehicleCondition
+  description  String?
+  status       VehicleStatus    @default(AVAILABLE)
+  date_posted  DateTime         @default(now())
+
+  seller    Seller          @relation(fields: [sellerId], references: [userId])
+  category  VehicleCategory @relation(fields: [categoryId], references: [id])
+  images    VehicleImage[]
+  inquiries Inquiry[]
+}
+
+model VehicleImage {
+  id        Int    @id @default(autoincrement())
+  vehicleId Int
+  image_url String
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+}
+
+model Inquiry {
+  id        Int      @id @default(autoincrement())
+  buyerId   Int
+  vehicleId Int
+  message   String
+  createdAt DateTime @default(now())
+
+  buyer   User    @relation(fields: [buyerId], references: [id])
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
 }

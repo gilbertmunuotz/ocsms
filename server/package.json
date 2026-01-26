@@ -2,7 +2,7 @@
   "name": "server",
   "version": "0.0.0",
   "scripts": {
-    "dev": "nodemon ./server.ts",
+    "dev": "nodemon --exec ts-node --files ./server.ts",
     "build": "tsc",
     "clean": "rm -rf ./node_modules ./dist package-lock.json",
     "lint": "eslint . --ext .ts",
