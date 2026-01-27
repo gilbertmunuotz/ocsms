@@ -1,23 +1,25 @@
 
 import { SERVER_URI } from "@/constants/constant";
 import Image from "next/image";
+import VehicleCard from "@/components/ui/vehicle-card";
+import { Vehicle } from "@/interfaces/interface";
 
-type Vehicle = {
-  id: number;
-  brand: string;
-  model: string;
-  year: number;
-  price: number;
-  mileage: number;
-  fuel_type: string;
-  transmission: string;
-  category: {
-    category_name: string;
-  };
-  images: {
-    image_url: string;
-  }[];
-};
+// type Vehicle = {
+//   id: number;
+//   brand: string;
+//   model: string;
+//   year: number;
+//   price: number;
+//   mileage: number;
+//   fuel_type: string;
+//   transmission: string;
+//   category: {
+//     category_name: string;
+//   };
+//   images: {
+//     image_url: string;
+//   }[];
+// };
 
 // const imageUrl = `${SERVER_URI}${vehicle.images[0].image_url}`;
 
@@ -54,40 +56,10 @@ export default async function Page() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {vehicles.map((vehicle) => (
-          <div
+          <VehicleCard
             key={vehicle.id}
-            className="bg-white rounded-lg shadow overflow-hidden"
-          >
-            <Image
-              src={
-                vehicle.images?.[0]?.image_url ||
-                "/cars.jpg"
-              }
-              alt={`${vehicle.brand} ${vehicle.model}`}
-              width= {300}
-              height={250}
-              className="h-48 w-full object-cover"
-            />
-
-            <div className="p-4 space-y-1">
-              <h2 className="font-semibold text-lg">
-                {vehicle.brand} {vehicle.model}
-              </h2>
-
-              <p className="text-sm text-gray-500">
-                {vehicle.year} • {vehicle.category.category_name}
-              </p>
-
-              <p className="text-sm text-gray-500">
-                {vehicle.mileage.toLocaleString()} km •{" "}
-                {vehicle.fuel_type}
-              </p>
-
-              <p className="mt-2 text-red-600 font-bold">
-                ${vehicle.price.toLocaleString()}
-              </p>
-            </div>
-          </div>
+            vehicle={vehicle}
+          />
         ))}
       </div>
     </div>
