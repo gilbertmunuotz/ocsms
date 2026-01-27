@@ -4,7 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { VehicleCardProps } from '@/interfaces/interface';
-import { API_BASE_URL } from "@/constants/constant";
+import { SERVER_URI } from "@/constants/constant";
 import { MapPin } from "lucide-react";
 
 
@@ -12,7 +12,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
     const imagePath = vehicle.images?.[0]?.image_url;
 
     const imageUrl = imagePath
-        ? `${API_BASE_URL}${imagePath}`
+        ? `${SERVER_URI}${imagePath}`
         : "/cars.jpg";
 
     return (

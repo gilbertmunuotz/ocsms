@@ -1,46 +1,83 @@
+"use client"
 
-import { SERVER_URI } from "@/constants/constant";
-import Image from "next/image";
-import VehicleCard from "@/components/ui/vehicle-card";
-import { Vehicle } from "@/interfaces/interface";
+import { useEffect, useMemo, useState } from "react"
+import { SERVER_URI } from "@/constants/constant"
+import VehicleCard from "@/components/ui/vehicle-card"
+import VehicleFilters from "@/components/vehicle-filters"
+import { Vehicle } from "@/interfaces/interface"
 
-// type Vehicle = {
-//   id: number;
-//   brand: string;
-//   model: string;
-//   year: number;
-//   price: number;
-//   mileage: number;
-//   fuel_type: string;
-//   transmission: string;
-//   category: {
-//     category_name: string;
-//   };
-//   images: {
-//     image_url: string;
-//   }[];
-// };
-
-// const imageUrl = `${SERVER_URI}${vehicle.images[0].image_url}`;
-
-async function getVehicles(): Promise<{ vehicles: Vehicle[] }> {
-  const res = await fetch(
-    `${SERVER_URI}/api/v1/vehicle/all`,
-    {
-      cache: "no-store",
-    }
-    
-  );
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch vehicles");
-  }
-
-  return res.json();
+const DEFAULT_FILTERS = {
+  categoryId: "",
+  fuel_type: "",
+  transmission: "",
+  condition: "",
+  minPrice: "",
+  maxPrice: "",
 }
 
-export default async function Page() {
-  const { vehicles } = await getVehicles();
+export default function Page() {
+  const [vehicles, setVehicles] = useState<Vehicle[]>([])
+  const [filters, setFilters] = useState(DEFAULT_FILTERS)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    async function fetchVehicles() {
+      try {
+        setLoading(true)
+        const res = await fetch(`${SERVER_URI}/api/v1/vehicle/all`)
+        const data = await res.json()
+        setVehicles(data.vehicles)
+      } catch (error) {
+        console.error("Failed to fetch vehicles", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchVehicles()
+  }, [])
+
+  const filteredVehicles = useMemo(() => {
+    let result = [...vehicles]
+
+    if (filters.categoryId) {
+      result = result.filter(
+        v => String(v.category?.id) === filters.categoryId
+      )
+    }
+
+    if (filters.fuel_type) {
+      result = result.filter(
+        v => v.fuel_type === filters.fuel_type
+      )
+    }
+
+    if (filters.transmission) {
+      result = result.filter(
+        v => v.transmission === filters.transmission
+      )
+    }
+
+    if (filters.condition) {
+      result = result.filter(
+        v => v.condition === filters.condition
+      )
+    }
+
+    if (filters.minPrice) {
+      result = result.filter(
+        v => v.price >= Number(filters.minPrice)
+      )
+    }
+
+    if (filters.maxPrice) {
+      result = result.filter(
+        v => v.price <= Number(filters.maxPrice)
+      )
+    }
+
+    return result
+  }, [vehicles, filters])
 
   return (
     <div className="max-w-7xl mx-auto p-6">
@@ -48,14 +85,25 @@ export default async function Page() {
         Browse Vehicles
       </h1>
 
-      {vehicles.length === 0 && (
-        <p className="text-gray-500">
-          No vehicles available at the moment.
+      <VehicleFilters
+        filters={filters}
+        onChange={setFilters}
+      />
+
+      {loading && (
+        <p className="text-muted-foreground mt-4">
+          Loading vehicles...
         </p>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {vehicles.map((vehicle) => (
+      {!loading && filteredVehicles.length === 0 && (
+        <p className="text-muted-foreground mt-4">
+          No vehicles found.
+        </p>
+      )}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        {filteredVehicles.map(vehicle => (
           <VehicleCard
             key={vehicle.id}
             vehicle={vehicle}
@@ -63,5 +111,5 @@ export default async function Page() {
         ))}
       </div>
     </div>
-  );
+  )
 }
