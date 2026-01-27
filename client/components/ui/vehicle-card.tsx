@@ -1,13 +1,14 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { VehicleCardProps } from '@/interfaces/interface';
 import { API_BASE_URL } from "@/constants/constant";
+import { MapPin } from "lucide-react";
 
 
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
-    
     const imagePath = vehicle.images?.[0]?.image_url;
 
     const imageUrl = imagePath
@@ -60,9 +61,13 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             <CardFooter className="flex justify-between">
                 <span className="text-xs text-muted-foreground">
                     Seller: {vehicle.seller?.business_name ?? "Verified Seller"}
-                    <p className="text-lg">📍{vehicle.seller.location}</p>
+                    <p className="text-lg"><MapPin className="inline w-4 h-4 mr-1" />{vehicle.seller.location}</p>
                 </span>
-                <Button size="sm" className="cursor-pointer">View Details</Button>
+                <Button size="sm" asChild>
+                    <Link href={`/dashboard/buyer/vehicles/${vehicle.id}`}>
+                        View Details
+                    </Link>
+                </Button>
             </CardFooter>
         </Card>
     );
