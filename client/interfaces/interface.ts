@@ -22,6 +22,7 @@ export interface VehicleCardProps {
             business_name: string;
             location: string;
         };
+        images: VehicleImage[];
     };
 }
 
@@ -51,4 +52,10 @@ export interface Vehicle {
         business_name: string;
         location: string;
     };
+    images: VehicleImage[];
+}
+
+export interface VehicleImage {
+  id: number;
+  image_url: string;
 }

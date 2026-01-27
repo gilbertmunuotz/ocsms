@@ -12,6 +12,7 @@ import VehicleCategoryRoutes from "./routes/vehicleCategory";
 import VehicleRoutes from './routes/vehicles';
 import SellerRoutes from "./routes/seller";
 import AdminRoutes from "./routes/admin";
+import path from 'path';
 
 // ****  Setup **** //
 
@@ -46,6 +47,12 @@ app.use('/api/v1/vehicle', VehicleRoutes);
 app.use('/api/v1/seller', SellerRoutes);
 app.use('/api/v1/users', AdminRoutes);
 
+// Serve static files from uploads directory
+// app.use("/uploads", express.static("uploads"));
+app.use(
+  "/uploads",
+  express.static(path.resolve(process.cwd(), "uploads"))
+);
 // Listen to Server Response
 const port = EnvVars.Port;
 app.listen(port, () => {

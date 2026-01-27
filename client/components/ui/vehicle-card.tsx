@@ -1,12 +1,33 @@
+import Image from "next/image";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { VehicleCardProps } from '@/interfaces/interface';
+import { API_BASE_URL } from "@/constants/constant";
 
 
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
+    
+    const imagePath = vehicle.images?.[0]?.image_url;
+
+    const imageUrl = imagePath
+        ? `${API_BASE_URL}${imagePath}`
+        : "/cars.jpg";
+
     return (
         <Card className="hover:shadow-lg transition-shadow">
+            
+             {/* Vehicle Image */}
+            <div className="relative w-full h-48 bg-gray-100">
+                <Image
+                src={imageUrl}
+                alt={`${vehicle.brand} ${vehicle.model}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 33vw"
+                />
+            </div>
+
             <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                     <span>
