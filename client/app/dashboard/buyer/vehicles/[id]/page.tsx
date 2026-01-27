@@ -2,6 +2,8 @@ import { SERVER_URI } from "@/constants/constant";
 import { Vehicle } from "@/interfaces/interface";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
+import { InquiryForm } from "@/components/buyer-inquiry-form";
+
 
 async function getVehicle(id: string): Promise<Vehicle> {
   const res = await fetch(
@@ -91,11 +93,10 @@ export default async function Page({
       </section>
 
       {/* CTA */}
-      <div className="flex justify-end">
-        <button className="bg-red-600 text-white px-6 py-2 rounded-sm">
-          Contact Seller
-        </button>
-      </div>
+      <section className="border-t pt-6">
+        <InquiryForm vehicleId={vehicle.id} />
+      </section>
+
     </div>
   );
 }
