@@ -1,4 +1,4 @@
-import { Home, User2, ChevronUp, Heart, MessageSquare, User } from "lucide-react"
+import { Home, User2, ChevronUp, MessageSquare, User } from "lucide-react"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { auth } from "@/auth";
@@ -18,11 +18,6 @@ const items = [
     title: "My Inquiries",
     url: "/dashboard/buyer/inquiries",
     icon: MessageSquare,
-  },
-  {
-    title: "Saved Vehicles",
-    url: "/dashboard/buyer/saved",
-    icon: Heart,
   },
   {
     title: "Profile",

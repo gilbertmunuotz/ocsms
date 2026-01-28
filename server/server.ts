@@ -49,14 +49,8 @@ app.use('/api/v1/vehicle', VehicleRoutes);
 app.use('/api/v1/seller', SellerRoutes);
 app.use('/api/v1/users', AdminRoutes);
 app.use("/api/v1/inquiry", InquiryRoutes);
+app.use("/uploads", express.static(path.resolve(process.cwd(), "uploads")));
 
-
-// Serve static files from uploads directory
-// app.use("/uploads", express.static("uploads"));
-app.use(
-  "/uploads",
-  express.static(path.resolve(process.cwd(), "uploads"))
-);
 // Listen to Server Response
 const port = EnvVars.Port;
 app.listen(port, () => {

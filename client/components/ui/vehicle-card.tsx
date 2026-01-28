@@ -17,15 +17,15 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
 
     return (
         <Card className="hover:shadow-lg transition-shadow">
-            
-             {/* Vehicle Image */}
+
+            {/* Vehicle Image */}
             <div className="relative w-full h-48 bg-gray-100">
                 <Image
-                src={imageUrl}
-                alt={`${vehicle.brand} ${vehicle.model}`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 33vw"
+                    src={imageUrl}
+                    alt={`${vehicle.brand} ${vehicle.model}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 33vw"
                 />
             </div>
 
@@ -64,7 +64,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
                     <p className="text-lg"><MapPin className="inline w-4 h-4 mr-1" />{vehicle.seller.location}</p>
                 </span>
                 <Button size="sm" asChild>
-                    <Link href={`/dashboard/buyer/vehicles/${vehicle.id}`}>
+                    <Link href={`/vehicles/${vehicle.id}`}>
                         View Details
                     </Link>
                 </Button>

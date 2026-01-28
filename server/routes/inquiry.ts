@@ -6,11 +6,6 @@ import { createInquiry } from "../controllers/inquiry";
 const router = Router();
 
 // Buyer creates inquiry
-router.post(
-  "/new",
-  verifyToken,
-  authorize("BUYER"),
-  createInquiry,
-);
+router.post("/new", verifyToken, authorize("BUYER"), createInquiry);
 
 export default router;

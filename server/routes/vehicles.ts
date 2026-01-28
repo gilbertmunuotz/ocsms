@@ -1,6 +1,7 @@
 // *** Import Router & Controller Func *** //
 import { Router } from "express";
 import { verifyToken } from '../middlewares/jwtToken';
+import { upload } from "../middlewares/multerConfig";
 import { authorize } from "../middlewares/authorize";
 import { createVehicle, getVehicles, getVehicleById, deleteVehicle, updateVehicle, getAvailableVehicles } from "../controllers/vehicles";
 
@@ -9,7 +10,8 @@ import { createVehicle, getVehicles, getVehicleById, deleteVehicle, updateVehicl
 const router = Router();
 
 //Create Vehicle
-router.post("/new", verifyToken, authorize("SELLER", "ADMIN"), createVehicle);
+// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+router.post("/new", verifyToken, authorize("SELLER", "ADMIN"), upload.single("image"), createVehicle);
 
 //Read all vehicles
 router.get("/all", getVehicles);
@@ -17,9 +19,7 @@ router.get("/all", getVehicles);
 // Read Buyer vehicle listing 
 router.get("/", getAvailableVehicles);
 
-
 // Read single vehicle
-// router.get("/vehicle/:id", verifyToken, getVehicleById);
 router.get("/vehicle/:id", getVehicleById);
 
 // Update Vehicle Information

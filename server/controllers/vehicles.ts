@@ -3,6 +3,7 @@ import HttpStatusCodes from "../constants/HttpStatusCodes";
 import prisma from "../services/prisma";
 import { Vehicle } from "../constants/interfaces";
 
+
 //(DESC) Create Vehicle
 export async function createVehicle(req: Request, res: Response, next: NextFunction) {
 
@@ -12,10 +13,17 @@ export async function createVehicle(req: Request, res: Response, next: NextFunct
     const user = req.user!;
 
     try {
+        // 0. Validate image upload
+        if (!req.file) {
+            return res.status(HttpStatusCodes.BAD_REQUEST).json({
+                message: "At least one vehicle image is required",
+            });
+        }
 
         // 1. Validate category exists
         const category = await prisma.vehicleCategory.findUnique({
-            where: { id: categoryId },
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-conversion
+            where: { id: Number(categoryId) },
         });
 
         if (!category) {
@@ -55,9 +63,25 @@ export async function createVehicle(req: Request, res: Response, next: NextFunct
             },
         });
 
+        // 4. Create vehicle image
+        const imageUrl = `/uploads/${req.file.filename}`;
+
+        await prisma.vehicleImage.create({
+            data: {
+                vehicleId: vehicle.id,
+                image_url: imageUrl,
+            },
+        });
+
+        // 5. Fetch vehicle with images (clean response)
+        const vehicleWithImages = await prisma.vehicle.findUnique({
+            where: { id: vehicle.id },
+            include: { images: true },
+        });
+
         return res.status(HttpStatusCodes.CREATED).json({
             message: "Vehicle created successfully",
-            vehicle,
+            vehicle: vehicleWithImages,
         });
     } catch (error) {
         next(error);
@@ -92,28 +116,28 @@ export async function getVehicles(req: Request, res: Response, next: NextFunctio
 
 // (DESC) Get vehicles for buyers (AVAILABLE only)
 export async function getAvailableVehicles(
-  req: Request,
-  res: Response,
-  next: NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) {
-  try {
-    const vehicles = await prisma.vehicle.findMany({
-      where: {
-        status: "AVAILABLE",
-      },
-      include: {
-        category: true,
-        images: true,
-      },
-      orderBy: {
-        date_posted: "desc",
-      },
-    });
+    try {
+        const vehicles = await prisma.vehicle.findMany({
+            where: {
+                status: "AVAILABLE",
+            },
+            include: {
+                category: true,
+                images: true,
+            },
+            orderBy: {
+                date_posted: "desc",
+            },
+        });
 
-    return res.status(HttpStatusCodes.OK).json({ vehicles });
-  } catch (error) {
-    next(error);
-  }
+        return res.status(HttpStatusCodes.OK).json({ vehicles });
+    } catch (error) {
+        next(error);
+    }
 }
 
 
