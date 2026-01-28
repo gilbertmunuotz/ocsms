@@ -1,4 +1,4 @@
-import { Home, User2, ChevronUp } from "lucide-react"
+import { Home, User2, ChevronUp, Heart, MessageSquare, User } from "lucide-react"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { auth } from "@/auth";
@@ -7,13 +7,29 @@ import Link from "next/link";
 import Image from "next/image"
 
 // Menu items.
+
 const items = [
-    {
-        title: "Home",
-        url: "/dashboard",
-        icon: Home,
-    }
-]
+  {
+    title: "Browse Vehicles",
+    url: "/dashboard/buyer",
+    icon: Home,
+  },
+  {
+    title: "My Inquiries",
+    url: "/dashboard/buyer/inquiries",
+    icon: MessageSquare,
+  },
+  {
+    title: "Saved Vehicles",
+    url: "/dashboard/buyer/saved",
+    icon: Heart,
+  },
+  {
+    title: "Profile",
+    url: "/dashboard/buyer/profile",
+    icon: User,
+  },
+];
 
 export default async function BuyerSidebar() {
 

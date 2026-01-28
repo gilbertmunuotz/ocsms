@@ -22,6 +22,7 @@ export interface VehicleCardProps {
             business_name: string;
             location: string;
         };
+        images: VehicleImage[];
     };
 }
 
@@ -51,4 +52,24 @@ export interface Vehicle {
         business_name: string;
         location: string;
     };
+    images: VehicleImage[];
+}
+
+export interface VehicleImage {
+  id: number;
+  image_url: string;
+}
+
+export type VehicleFilterValues = {
+  categoryId: string
+  fuel_type: string
+  transmission: string
+  condition: string
+  minPrice: string
+  maxPrice: string
+}
+
+export type FiltersProps = {
+  filters: VehicleFilterValues
+  onChange: (filters: VehicleFilterValues) => void
 }

@@ -19,7 +19,8 @@ router.get("/", getAvailableVehicles);
 
 
 // Read single vehicle
-router.get("/vehicle/:id", verifyToken, getVehicleById);
+// router.get("/vehicle/:id", verifyToken, getVehicleById);
+router.get("/vehicle/:id", getVehicleById);
 
 // Update Vehicle Information
 router.put("/update/:id", verifyToken, authorize("SELLER", "ADMIN"), updateVehicle);
