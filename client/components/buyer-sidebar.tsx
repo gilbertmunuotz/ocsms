@@ -4,26 +4,25 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { auth } from "@/auth";
 import LogoutButton from "./logout";
 import Link from "next/link";
-import Image from "next/image"
 
 // Menu items.
 
 const items = [
-  {
-    title: "Browse Vehicles",
-    url: "/dashboard/buyer",
-    icon: Home,
-  },
-  {
-    title: "My Inquiries",
-    url: "/dashboard/buyer/inquiries",
-    icon: MessageSquare,
-  },
-  {
-    title: "Profile",
-    url: "/dashboard/buyer/profile",
-    icon: User,
-  },
+    {
+        title: "Browse Vehicles",
+        url: "/dashboard/buyer",
+        icon: Home,
+    },
+    {
+        title: "My Inquiries",
+        url: "/dashboard/buyer/inquiries",
+        icon: MessageSquare,
+    },
+    {
+        title: "Profile",
+        url: "/dashboard/buyer/profile",
+        icon: User,
+    },
 ];
 
 export default async function BuyerSidebar() {
@@ -34,8 +33,7 @@ export default async function BuyerSidebar() {
         <Sidebar>
             <SidebarContent>
                 <SidebarGroup>
-                    <Image src="/cars.jpg" width={200} height={400} className="object-cover rounded-full" alt="Dashboard Image" />
-                    <SidebarGroupContent>
+                   <SidebarGroupContent>
                         <SidebarMenu>
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title} className="mt-2">

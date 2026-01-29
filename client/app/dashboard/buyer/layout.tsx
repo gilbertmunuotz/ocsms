@@ -1,14 +1,23 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import BuyerSidebar from "@/components/buyer-sidebar"
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 
-export default async function BuyerLayout({ children, }: { children: React.ReactNode; }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
-      <BuyerSidebar />
-      <main className="flex-1">
-        <SidebarTrigger />
-        {children}
-      </main>
+      <div className="flex min-h-screen w-full">
+        <BuyerSidebar />
+
+        <SidebarInset
+          className="
+            flex flex-col flex-1
+            md:pl-[var(--sidebar-width)]
+            md:data-[state=collapsed]:pl-[var(--sidebar-width-collapsed)]">
+          <main className="flex-1 px-6 py-6 overflow-x-hidden">
+            <SidebarTrigger className="mb-4 md:hidden" />
+            {children}
+          </main>
+        </SidebarInset>
+      </div>
     </SidebarProvider>
-  );
+  )
 }

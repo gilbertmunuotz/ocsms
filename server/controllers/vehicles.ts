@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-conversion */
 import { Request, Response, NextFunction } from "express";
 import HttpStatusCodes from "../constants/HttpStatusCodes";
 import prisma from "../services/prisma";
@@ -10,6 +11,17 @@ export async function createVehicle(req: Request, res: Response, next: NextFunct
     // Destructure Request Body
     const { categoryId, brand, model, year, price, mileage, fuel_type, transmission, condition, description, status }: Vehicle = req.body;
 
+    // Normalize numeric fields
+    const parsedCategoryId = Number(categoryId);
+    const parsedYear = Number(year);
+    const parsedPrice = Number(price);
+    const parsedMileage = Number(mileage);
+
+    if (Number.isNaN(parsedCategoryId)) {
+        return res.status(HttpStatusCodes.BAD_REQUEST).json({
+            message: "categoryId must be a number",
+        });
+    }
     const user = req.user!;
 
     try {
@@ -49,12 +61,12 @@ export async function createVehicle(req: Request, res: Response, next: NextFunct
         const vehicle = await prisma.vehicle.create({
             data: {
                 sellerId,
-                categoryId,
+                categoryId: parsedCategoryId,
                 brand,
                 model,
-                year,
-                price,
-                mileage,
+                year: parsedYear,
+                price: parsedPrice,
+                mileage: parsedMileage,
                 fuel_type,
                 transmission,
                 condition,
@@ -115,11 +127,7 @@ export async function getVehicles(req: Request, res: Response, next: NextFunctio
 }
 
 // (DESC) Get vehicles for buyers (AVAILABLE only)
-export async function getAvailableVehicles(
-    req: Request,
-    res: Response,
-    next: NextFunction
-) {
+export async function getAvailableVehicles(req: Request, res: Response, next: NextFunction) {
     try {
         const vehicles = await prisma.vehicle.findMany({
             where: {

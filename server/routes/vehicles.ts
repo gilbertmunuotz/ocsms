@@ -10,7 +10,6 @@ import { createVehicle, getVehicles, getVehicleById, deleteVehicle, updateVehicl
 const router = Router();
 
 //Create Vehicle
-// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 router.post("/new", verifyToken, authorize("SELLER", "ADMIN"), upload.single("image"), createVehicle);
 
 //Read all vehicles

@@ -5,13 +5,7 @@ export default async function DashboardLayout({ children, }: { children: React.R
 
     const session = await auth();
 
-    if (!session) {
-        redirect("/auth/login");
-    }
+    if (!session) { redirect("/auth/login") }
 
-    return (
-        <div className="min-h-screen">
-            {children}
-        </div>
-    );
+    return (children);
 }

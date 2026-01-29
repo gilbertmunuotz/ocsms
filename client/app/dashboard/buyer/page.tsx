@@ -80,7 +80,7 @@ export default function Page() {
   }, [vehicles, filters])
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="w-full max-w-7xl">
       <h1 className="text-2xl font-semibold mb-6">
         Browse Vehicles
       </h1>

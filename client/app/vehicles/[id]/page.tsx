@@ -49,6 +49,7 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                             width={400}
                             height={300}
                             className="w-full h-full object-cover rounded-sm"
+                            unoptimized
                         />
                     ) : (
                         <span className="text-zinc-400">No image available</span>

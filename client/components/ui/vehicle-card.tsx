@@ -26,6 +26,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 33vw"
+                    unoptimized
                 />
             </div>
 

@@ -56,20 +56,33 @@ export interface Vehicle {
 }
 
 export interface VehicleImage {
-  id: number;
-  image_url: string;
+    id: number;
+    image_url: string;
 }
 
 export type VehicleFilterValues = {
-  categoryId: string
-  fuel_type: string
-  transmission: string
-  condition: string
-  minPrice: string
-  maxPrice: string
+    categoryId: string
+    fuel_type: string
+    transmission: string
+    condition: string
+    minPrice: string
+    maxPrice: string
 }
 
 export type FiltersProps = {
-  filters: VehicleFilterValues
-  onChange: (filters: VehicleFilterValues) => void
+    filters: VehicleFilterValues
+    onChange: (filters: VehicleFilterValues) => void
+}
+
+export interface VehicleRow {
+    id: number
+    brand: string
+    model: string
+    year: number
+    price: number
+    condition: string
+    status: string
+    category: string
+    seller: string
+    datePosted: string
 }

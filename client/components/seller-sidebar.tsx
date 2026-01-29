@@ -1,5 +1,5 @@
-import { Home, User2, ChevronUp } from "lucide-react"
-import {Sidebar,SidebarContent,SidebarFooter,SidebarGroup,SidebarGroupContent,SidebarMenu,SidebarMenuButton,SidebarMenuItem} from "@/components/ui/sidebar"
+import { Home, User2, ChevronUp, Car } from "lucide-react"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { auth } from "@/auth";
 import LogoutButton from "./logout";
@@ -11,6 +11,11 @@ const items = [
         title: "Home",
         url: "/dashboard",
         icon: Home,
+    },
+    {
+        title: "Vehicles",
+        url: "/dashboard/seller/vehicles",
+        icon: Car,
     }
 ]
 
