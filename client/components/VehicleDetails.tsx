@@ -38,7 +38,7 @@ export default function BuyerVehicleDetails({ vehicle, isAuthenticated }: Props)
 
       {/* Image + Specs */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="h-80 bg-zinc-800 rounded-sm">
+        <div className="relative bg-zinc-800 rounded-sm h-[320px] md:h-[420px]">
           {vehicle.images?.length ? (
             <Image
               src={`${SERVER_URI}${vehicle.images[0].image_url}`}
@@ -51,6 +51,7 @@ export default function BuyerVehicleDetails({ vehicle, isAuthenticated }: Props)
             <span className="text-zinc-400">No image available</span>
           )}
         </div>
+
 
         <div className="space-y-4">
           <Spec label="Price" value={`$${vehicle.price.toLocaleString()}`} />
@@ -103,13 +104,13 @@ export default function BuyerVehicleDetails({ vehicle, isAuthenticated }: Props)
                 toast.success("Inquiry sent");
                 setOpen(false);
                 setMessage("");
-                } catch (err) {
+              } catch (err) {
                 if (err instanceof Error) {
-                    toast.error(err.message);
+                  toast.error(err.message);
                 } else {
-                    toast.error("Failed to send inquiry");
+                  toast.error("Failed to send inquiry");
                 }
-                } finally {
+              } finally {
                 setLoading(false);
               }
             }}
